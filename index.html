@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desi Chaat Fiesta - Cloud Order System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #ff6b35;
+            --secondary: #f7931e;
+            --accent: #ff4081;
+            --light: #fff9e6;
+            --dark: #333;
+            --success: #4CAF50;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #ff6b35, #f7931e, #ff4081, #ff6b35);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            padding: 25px;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--dark);
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .order-form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .customer-info {
+            background: rgba(255, 249, 230, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        input[type="text"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.3);
+        }
+
+        .menu-section {
+            margin-bottom: 25px;
+            border: 2px solid rgba(255, 107, 53, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-content {
+            padding: 20px;
+            background: white;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .item-price {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .item-description {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .combo-item {
+            background: rgba(255, 249, 230, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px dashed var(--primary);
+        }
+
+        .combo-header {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .combo-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .combo-options {
+            margin-top: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .clear-btn, .logout-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .clear-btn:hover, .logout-btn:hover {
+            background: #e91e63;
+            transform: scale(1.05);
+        }
+
+        .order-item {
+            background: rgba(255, 249, 230, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .customer-name {
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .customer-phone {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .order-items {
+            margin-top: 10px;
+        }
+
+        .ordered-item {
+            padding: 5px 0;
+            border-bottom: 1px dashed #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ordered-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-quantity {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .order-total {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid var(--primary);
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .no-orders {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .floating-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s;
+        }
+
+        .floating-icon:hover {
+            transform: scale(1.1);
+            background: var(--secondary);
+        }
+
+        .admin-login {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .login-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: var(--primary);
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .login-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: var(--secondary);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--success);
+            color: white;
+            border-radius: 8px;
+            transform: translateX(150%);
+            transition: transform 0.5s;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .db-status {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .db-status.connected {
+            border-left: 4px solid var(--success);
+        }
+
+        .db-status.disconnected {
+            border-left: 4px solid var(--accent);
+        }
+
+        .stats-cards {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(255, 249, 230, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 5px solid var(--primary);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Database Status Indicator -->
+    <div class="db-status disconnected" id="dbStatus">
+        <i class="fas fa-database"></i> Database: Connecting...
+    </div>
+
+    <!-- Customer Order Page -->
+    <div id="customerPage" class="container">
+        <header>
+            <h1><i class="fas fa-utensils"></i> Desi Chaat Fiesta</h1>
+            <p class="subtitle">Cloud Order System - Works on All Devices</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="order-form">
+                <h2><i class="fas fa-shopping-cart"></i> Place Your Order</h2>
+                
+                <div class="customer-info">
+                    <div class="form-group">
+                        <label for="customerName"><i class="fas fa-user"></i> Your Name</label>
+                        <input type="text" id="customerName" name="customerName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phoneNumber"><i class="fas fa-phone"></i> Phone Number</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" required>
+                    </div>
+                </div>
+                
+                <!-- Chaats Section -->
+                <div class="menu-section">
+                    <div class="section-header">
+                        <span><i class="fas fa-bowl-food"></i> Chaats</span>
+                        <span>Starting at ₹40</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Chaat</div>
+                                <div class="item-price">₹40</div>
+                                <div class="item-description">Classic Indian chaat with tangy and spicy flavors</div>
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" data-item="Chaat">-</button>
+                                <input type="text" class="quantity-input" id="Chaat" value="0" readonly>
+                                <button class="quantity-btn plus" data-item="Chaat">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Mexican Fusion Chaat</div>
+                                <div class="item-price">₹50</div>
+                                <div class="item-description">A fusion of Mexican flavors with traditional Indian chaat</div>
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" data-item="Mexican Fusion Chaat">-</button>
+                                <input type="text" class="quantity-input" id="Mexican Fusion Chaat" value="0" readonly>
+                                <button class="quantity-btn plus" data-item="Mexican Fusion Chaat">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lays Bhel Section -->
+                <div class="menu-section">
+                    <div class="section-header">
+                        <span><i class="fas fa-bowl-food"></i> Lays Bhel</span>
+                        <span>₹60</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Lays Bhel</div>
+                                <div class="item-price">₹60</div>
+                                <div class="item-description">Crunchy Lays chips mixed with tangy chutneys and spices</div>
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" data-item="Lays Bhel">-</button>
+                                <input type="text" class="quantity-input" id="Lays Bhel" value="0" readonly>
+                                <button class="quantity-btn plus" data-item="Lays Bhel">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dabelis Section -->
+                <div class="menu-section">
+                    <div class="section-header">
+                        <span><i class="fas fa-burger"></i> Dabelis</span>
+                        <span>Starting at ₹15</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Dabeli</div>
+                                <div class="item-price">₹15</div>
+                                <div class="item-description">Classic Gujarati snack with spicy potato filling</div>
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" data-item="Dabeli">-</button>
+                                <input type="text" class="quantity-input" id="Dabeli" value="0" readonly>
+                                <button class="quantity-btn plus" data-item="Dabeli">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Cheese Dabeli</div>
+                                <div class="item-price">₹30</div>
+                                <div class="item-description">Dabeli topped with melted cheese for extra richness</div>
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" data-item="Cheese Dabeli">-</button>
+                                <input type="text" class="quantity-input" id="Cheese Dabeli" value="0" readonly>
+                                <button class="quantity-btn plus" data-item="Cheese Dabeli">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Shev Dabeli</div>
+                                <div class="item-price">₹20</div>
+                                <div class="item-description">Dabeli loaded with crunchy shev and chutneys</div>
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" data-item="Shev Dabeli">-</button>
+                                <input type="text" class="quantity-input" id="Shev Dabeli" value="0" readonly>
+                                <button class="quantity-btn plus" data-item="Shev Dabeli">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Soft Drinks Section -->
+                <div class="menu-section">
+                    <div class="section-header">
+                        <span><i class="fas fa-glass-cheers"></i> Soft Drinks</span>
+                        <span>₹20 each</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Sprite</div>
+                                <div class="item-price">₹20</div>
+                                <div class="item-description">Refreshing lemon-lime soda</div>
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" data-item="Sprite">-</button>
+                                <input type="text" class="quantity-input" id="Sprite" value="0" readonly>
+                                <button class="quantity-btn plus" data-item="Sprite">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Thumbs UP</div>
+                                <div class="item-price">₹20</div>
+                                <div class="item-description">Bold and strong cola drink</div>
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" data-item="Thumbs UP">-</button>
+                                <input type="text" class="quantity-input" id="Thumbs UP" value="0" readonly>
+                                <button class="quantity-btn plus" data-item="Thumbs UP">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <div class="item-name">Fanta</div>
+                                <div class="item-price">₹20</div>
+                                <div class="item-description">Fruity orange flavored soda</div>
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" data-item="Fanta">-</button>
+                                <input type="text" class="quantity-input" id="Fanta" value="0" readonly>
+                                <button class="quantity-btn plus" data-item="Fanta">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Combos Section -->
+                <div class="menu-section">
+                    <div class="section-header">
+                        <span><i class="fas fa-gift"></i> Combos</span>
+                        <span>Special Offers</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="combo-item">
+                            <div class="combo-header">
+                                <span>Combo Deal</span>
+                                <span>₹120</span>
+                            </div>
+                            <div class="combo-description">
+                                2 Butter Dabelis + Mexican Fusion Chaat + Any Drink of your choice
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" data-item="Combo Deal">-</button>
+                                <input type="text" class="quantity-input" id="Combo Deal" value="0" readonly>
+                                <button class="quantity-btn plus" data-item="Combo Deal">+</button>
+                            </div>
+                            <div class="combo-options">
+                                <div class="combo-option">
+                                    <label>Select your drink:</label>
+                                    <select id="comboDrink">
+                                        <option value="Sprite">Sprite</option>
+                                        <option value="Thumbs UP">Thumbs UP</option>
+                                        <option value="Fanta">Fanta</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="placeOrderBtn">
+                    <i class="fas fa-paper-plane"></i> Place Order
+                </button>
+            </div>
+            
+            <div class="admin-panel hidden" id="adminPanel">
+                <div class="admin-header">
+                    <h2><i class="fas fa-chart-bar"></i> Order Dashboard</h2>
+                    <div>
+                        <button class="clear-btn" id="clearOrdersBtn">
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                        <button class="logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                <div id="ordersList">
+                    <div class="no-orders">Loading orders...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Panel -->
+    <div class="admin-login hidden" id="adminLogin">
+        <div class="login-form">
+            <button class="close-btn" id="closeLoginBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2><i class="fas fa-lock"></i> Admin Login</h2>
+            <input type="text" id="adminUsername" placeholder="Username">
+            <input type="password" id="adminPassword" placeholder="Password">
+            <button class="login-btn" id="loginBtn">Login</button>
+        </div>
+    </div>
+
+    <!-- Floating Admin Icon -->
+    <div class="floating-icon" id="adminIcon">
+        <i class="fas fa-lock"></i>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> Order placed successfully!
+    </div>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        // YOUR JSONBIN CREDENTIALS
+        const JSONBIN_CONFIG = {
+            API_KEY: '$2a$10$ImoMCCY8OZh6ztS9bDmwZOEb5lG2uyweY8nTKcPzPSPUMNAYvvdDm',  // Your Secret Key
+            BIN_ID: '691ffb8fd0ea881f40f60c6d',           // Your Bin ID
+            BASE_URL: 'https://api.jsonbin.io/v3/b'
+        };
+
+        // Menu prices
+        const menuPrices = {
+            "Chaat": 40,
+            "Mexican Fusion Chaat": 50,
+            "Lays Bhel": 60,
+            "Dabeli": 15,
+            "Cheese Dabeli": 30,
+            "Shev Dabeli": 20,
+            "Sprite": 20,
+            "Thumbs UP": 20,
+            "Fanta": 20,
+            "Combo Deal": 120
+        };
+
+        // ==================== CLOUD DATABASE FUNCTIONS ====================
+        class CloudDatabase {
+            constructor(config) {
+                this.config = config;
+                this.isConnected = false;
+            }
+
+            async testConnection() {
+                try {
+                    const response = await fetch(`${this.config.BASE_URL}/${this.config.BIN_ID}/latest`, {
+                        headers: {
+                            'X-Master-Key': this.config.API_KEY
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        this.isConnected = true;
+                        return true;
+                    } else {
+                        throw new Error('Connection failed');
+                    }
+                } catch (error) {
+                    this.isConnected = false;
+                    console.error('Cloud database connection failed:', error);
+                    return false;
+                }
+            }
+
+            async loadOrders() {
+                try {
+                    const response = await fetch(`${this.config.BASE_URL}/${this.config.BIN_ID}/latest`, {
+                        headers: {
+                            'X-Master-Key': this.config.API_KEY
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to load orders');
+                    }
+
+                    const data = await response.json();
+                    return data.record || [];
+                } catch (error) {
+                    console.error('Error loading from cloud:', error);
+                    // Fallback to localStorage
+                    return this.loadFromLocalStorage();
+                }
+            }
+
+            async saveOrder(order) {
+                try {
+                    // First load existing orders
+                    const existingOrders = await this.loadOrders();
+                    
+                    // Add new order
+                    const updatedOrders = [...existingOrders, order];
+                    
+                    // Save back to cloud
+                    const response = await fetch(`${this.config.BASE_URL}/${this.config.BIN_ID}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': this.config.API_KEY
+                        },
+                        body: JSON.stringify(updatedOrders)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to save order');
+                    }
+
+                    // Also save to localStorage as backup
+                    this.saveToLocalStorage(updatedOrders);
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Error saving to cloud:', error);
+                    // Fallback to localStorage
+                    this.saveOrderToLocal(order);
+                    return false;
+                }
+            }
+
+            async clearOrders() {
+                try {
+                    const response = await fetch(`${this.config.BASE_URL}/${this.config.BIN_ID}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': this.config.API_KEY
+                        },
+                        body: JSON.stringify([])
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to clear orders');
+                    }
+
+                    // Also clear localStorage
+                    localStorage.removeItem('desiChaatOrders_backup');
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Error clearing cloud orders:', error);
+                    return false;
+                }
+            }
+
+            // Local storage fallback methods
+            loadFromLocalStorage() {
+                return JSON.parse(localStorage.getItem('desiChaatOrders_backup')) || [];
+            }
+
+            saveToLocalStorage(orders) {
+                localStorage.setItem('desiChaatOrders_backup', JSON.stringify(orders));
+            }
+
+            saveOrderToLocal(order) {
+                const orders = this.loadFromLocalStorage();
+                orders.push(order);
+                this.saveToLocalStorage(orders);
+            }
+        }
+
+        // ==================== APPLICATION INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize cloud database
+            const db = new CloudDatabase(JSONBIN_CONFIG);
+            const dbStatus = document.getElementById('dbStatus');
+
+            // Test connection
+            const isConnected = await db.testConnection();
+            if (isConnected) {
+                dbStatus.innerHTML = '<i class="fas fa-database"></i> Database: Cloud Connected';
+                dbStatus.className = 'db-status connected';
+            } else {
+                dbStatus.innerHTML = '<i class="fas fa-database"></i> Database: Local Storage (Offline)';
+                dbStatus.className = 'db-status disconnected';
+            }
+
+            // Get DOM elements
+            const customerPage = document.getElementById('customerPage');
+            const placeOrderBtn = document.getElementById('placeOrderBtn');
+            const ordersList = document.getElementById('ordersList');
+            const notification = document.getElementById('notification');
+            const clearOrdersBtn = document.getElementById('clearOrdersBtn');
+            const adminIcon = document.getElementById('adminIcon');
+            const adminLogin = document.getElementById('adminLogin');
+            const loginBtn = document.getElementById('loginBtn');
+            const closeLoginBtn = document.getElementById('closeLoginBtn');
+            const adminPanel = document.getElementById('adminPanel');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            // Load initial orders
+            loadOrders();
+
+            // Quantity buttons
+            document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const item = this.getAttribute('data-item');
+                    const input = document.getElementById(item);
+                    input.value = parseInt(input.value) + 1;
+                });
+            });
+
+            document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const item = this.getAttribute('data-item');
+                    const input = document.getElementById(item);
+                    if (parseInt(input.value) > 0) {
+                        input.value = parseInt(input.value) - 1;
+                    }
+                });
+            });
+
+            // Place order
+            placeOrderBtn.addEventListener('click', async function() {
+                const customerName = document.getElementById('customerName').value.trim();
+                const phoneNumber = document.getElementById('phoneNumber').value.trim();
+                
+                if (!customerName || !phoneNumber) {
+                    alert('Please enter your name and phone number.');
+                    return;
+                }
+
+                const orderItems = [];
+                let totalAmount = 0;
+
+                for (const itemName in menuPrices) {
+                    const input = document.getElementById(itemName);
+                    if (input) {
+                        const quantity = parseInt(input.value);
+                        if (quantity > 0) {
+                            const itemTotal = menuPrices[itemName] * quantity;
+                            totalAmount += itemTotal;
+                            
+                            orderItems.push({
+                                name: itemName,
+                                quantity: quantity,
+                                price: menuPrices[itemName],
+                                total: itemTotal
+                            });
+                        }
+                    }
+                }
+
+                if (orderItems.length === 0) {
+                    alert('Please select at least one item to order.');
+                    return;
+                }
+
+                const order = {
+                    id: Date.now(),
+                    customerName: customerName,
+                    phoneNumber: phoneNumber,
+                    items: orderItems,
+                    total: totalAmount,
+                    timestamp: new Date().toLocaleString(),
+                    date: new Date().toDateString()
+                };
+
+                const success = await db.saveOrder(order);
+                
+                if (success) {
+                    showNotification('Order placed successfully!', 'success');
+                } else {
+                    showNotification('Order saved locally (offline mode)', 'warning');
+                }
+
+                resetOrderForm();
+                loadOrders();
+            });
+
+            // Clear orders
+            clearOrdersBtn.addEventListener('click', async function() {
+                if (confirm('Are you sure you want to clear all orders?')) {
+                    const success = await db.clearOrders();
+                    if (success) {
+                        showNotification('All orders cleared!', 'success');
+                    } else {
+                        showNotification('Failed to clear cloud orders', 'error');
+                    }
+                    loadOrders();
+                }
+            });
+
+            // Admin functionality
+            adminIcon.addEventListener('click', function() {
+                adminLogin.classList.remove('hidden');
+            });
+
+            closeLoginBtn.addEventListener('click', function() {
+                adminLogin.classList.add('hidden');
+            });
+
+            adminLogin.addEventListener('click', function(e) {
+                if (e.target === adminLogin) {
+                    adminLogin.classList.add('hidden');
+                }
+            });
+
+            loginBtn.addEventListener('click', function() {
+                const username = document.getElementById('adminUsername').value;
+                const password = document.getElementById('adminPassword').value;
+                
+                if (username === 'admin' && password === 'admin123') {
+                    adminLogin.classList.add('hidden');
+                    adminPanel.classList.remove('hidden');
+                    document.getElementById('adminUsername').value = '';
+                    document.getElementById('adminPassword').value = '';
+                } else {
+                    alert('Invalid username or password. Use: admin / admin123');
+                }
+            });
+
+            logoutBtn.addEventListener('click', function() {
+                adminPanel.classList.add('hidden');
+            });
+
+            // Helper functions
+            async function loadOrders() {
+                const orders = await db.loadOrders();
+                displayOrders(orders);
+            }
+
+            function displayOrders(orders) {
+                ordersList.innerHTML = '';
+                
+                if (orders.length === 0) {
+                    ordersList.innerHTML = '<div class="no-orders">No orders placed yet</div>';
+                    return;
+                }
+
+                orders.reverse().forEach(order => {
+                    const orderElement = document.createElement('div');
+                    orderElement.className = 'order-item';
+                    
+                    let itemsHTML = '';
+                    order.items.forEach(item => {
+                        itemsHTML += `
+                            <div class="ordered-item">
+                                <span>${item.name}</span>
+                                <span>
+                                    <span class="item-quantity">${item.quantity}x</span> 
+                                    ₹${item.total}
+                                </span>
+                            </div>
+                        `;
+                    });
+                    
+                    orderElement.innerHTML = `
+                        <div class="order-header">
+                            <div class="customer-name">${order.customerName}</div>
+                            <div class="customer-phone">${order.phoneNumber}</div>
+                        </div>
+                        <div class="order-timestamp">${order.timestamp}</div>
+                        <div class="order-items">
+                            ${itemsHTML}
+                        </div>
+                        <div class="order-total">Total: ₹${order.total}</div>
+                    `;
+                    
+                    ordersList.appendChild(orderElement);
+                });
+            }
+
+            function resetOrderForm() {
+                document.getElementById('customerName').value = '';
+                document.getElementById('phoneNumber').value = '';
+                
+                for (const itemName in menuPrices) {
+                    const input = document.getElementById(itemName);
+                    if (input) {
+                        input.value = '0';
+                    }
+                }
+            }
+
+            function showNotification(message, type = 'success') {
+                const notification = document.getElementById('notification');
+                notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'exclamation-circle'}"></i> ${message}`;
+                notification.className = `notification show ${type}`;
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
